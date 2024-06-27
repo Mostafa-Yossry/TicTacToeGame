@@ -41,9 +41,11 @@ jobs:
         nmake
 
     - name: Deploy Qt dependencies
+      env:
+        QT_DIR: C:\Qt\5.15.2\msvc2019_64
       run: |
-        # Ensure windeployqt is in the PATH
-        $Env:PATH += ";$Env:Qt5_15_2_MSVC2019_64_BIN"
+        # Add the Qt bin directory to PATH
+        $Env:PATH += ";$Env:QT_DIR\bin"
         
         # Deploy Qt dependencies to the directory with the .exe
         windeployqt TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe
