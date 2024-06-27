@@ -49,6 +49,6 @@ jobs:
 
     - name: Cleanup
       run: |
-        del /Q /S release\*
-        del /Q /S debug\*
+        Remove-Item -Path "TicTacToeProjectfinal/TicTacToeProject/release/*" -Force -Recurse
+        Remove-Item -Path "TicTacToeProjectfinal/TicTacToeProject/debug/*" -Force -Recurse
 
