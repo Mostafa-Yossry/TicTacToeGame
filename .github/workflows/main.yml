@@ -25,14 +25,19 @@ jobs:
           qtbase5-dev \
           qtchooser \
           qt5-qmake \
-          qtbase5-dev-tools
+          qtbase5-dev-tools \
+          libqt5widgets5 \
+          libqt5network5
 
     - name: Build project
       run: |
-        qmake
+        qmake path/to/your/project.pro
         make
 
- 
+    - name: Run tests
+      run: |
+        make test  # Run your Qt tests here
+
     - name: Deploy
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
@@ -41,3 +46,4 @@ jobs:
     - name: Cleanup
       run: |
         make clean  # Clean up build artifacts
+
