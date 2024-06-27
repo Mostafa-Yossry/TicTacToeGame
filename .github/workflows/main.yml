@@ -40,15 +40,22 @@ jobs:
         # Build the project to create the .exe file
         nmake
 
+    - name: Deploy Qt dependencies
+      run: |
+        # Ensure windeployqt is in the PATH
+        $Env:PATH += ";$Env:Qt5_15_2_MSVC2019_64_BIN"
+        
+        # Deploy Qt dependencies to the directory with the .exe
+        windeployqt TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe
+
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         name: TicTacToeExecutable
         path: |
-          TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe  # Adjust the path to your .exe file
+          TicTacToeProjectfinal/TicTacToeProject/release/**  # Adjust the path to include all necessary files
 
     - name: Cleanup
       run: |
         Remove-Item -Path "TicTacToeProjectfinal/TicTacToeProject/release/*" -Force -Recurse
         Remove-Item -Path "TicTacToeProjectfinal/TicTacToeProject/debug/*" -Force -Recurse
-
