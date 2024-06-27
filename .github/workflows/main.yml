@@ -16,22 +16,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Qt
-      uses: jurplel/setup-qt@v2
-      with:
-        qt-version: '5.15.2'  # Replace with your Qt version
-        components: 'qtbase qttools'  # Adjust components as needed
-
-    - name: Install dependencies
+    - name: Install Qt dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y <your-dependencies>
+        sudo apt-get install -y build-essential libgl1-mesa-dev
+
+    - name: Install Qt
+      run: |
+        sudo apt-get install -y qt5-default qtbase5-dev qtdeclarative5-dev qttools5-dev-tools
 
     - name: Build project
       run: |
         qmake -qt=qt5
         make
 
+  
     - name: Deploy
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
