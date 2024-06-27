@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Build and Package Qt Application
 
 on:
   push:
@@ -10,37 +10,37 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Qt dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          build-essential \
-          libgl1-mesa-dev \
-          qtbase5-dev \
-          qtchooser \
-          qt5-qmake \
-          qtbase5-dev-tools \
-          libqt5widgets5 \
-          libqt5network5
+    - name: Set up Qt
+      uses: jurplel/install-qt-action@v2
+      with:
+        version: '5.15.2'  # Specify the Qt version you need
+        host: 'windows'
+        target: 'desktop'
 
     - name: Build project
       run: |
-        qmake TicTacToeProjectfinal/TicTacToeProject/TicTacToeProject.pro
-        make
+        # Navigate to the directory containing the .pro file
+        cd TicTacToeProjectfinal/TicTacToeProject
+        
+        # Run qmake to generate the makefile
+        qmake TicTacToeProject.pro
+        
+        # Build the project to create the .exe file
+        nmake
 
-    
-
-    - name: Deploy
-      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: |
-        # Deployment steps (e.g., upload artifacts, deploy to a server)
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: TicTacToeExecutable
+        path: |
+          TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe  # Adjust the path to your .exe file
 
     - name: Cleanup
       run: |
-        make clean  # Clean up build artifacts
+        nmake clean  # Clean up build artifacts
