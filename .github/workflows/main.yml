@@ -1,0 +1,46 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main  # Replace with your main branch name
+  pull_request:
+    branches:
+      - main  # Replace with your main branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Qt
+      uses: jurplel/setup-qt@v2
+      with:
+        qt-version: '5.15.2'  # Replace with your Qt version
+        components: 'qtbase qttools'  # Adjust components as needed
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y <your-dependencies>
+
+    - name: Build project
+      run: |
+        qmake -qt=qt5
+        make
+
+    - name: Run tests
+      run: |
+        make test  # Run your Qt tests here
+
+    - name: Deploy
+      if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        # Deployment steps (e.g., upload artifacts, deploy to a server)
+
+    - name: Cleanup
+      run: |
+        make clean  # Clean up build artifacts
