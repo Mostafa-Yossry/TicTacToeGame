@@ -42,21 +42,11 @@ jobs:
 
     - name: Deploy Qt dependencies
       run: |
-        # Specify the path to the windeployqt executable
-        $windeployqtPath = "$Env:Qt5_15_2_MSVC2019_64_BIN\windeployqt.exe"
-        
-        # Verify the path exists
-        if (-Not (Test-Path $windeployqtPath)) {
-          throw "windeployqt not found at $windeployqtPath"
-        }
+        # Ensure windeployqt is in the PATH
+        $Env:PATH += ";$Env:Qt5_15_2_MSVC2019_64_BIN"
         
         # Deploy Qt dependencies to the directory with the .exe
-        & $windeployqtPath TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe
-        
-        # Check for errors
-        if ($LASTEXITCODE -ne 0) {
-          throw "windeployqt failed with exit code $LASTEXITCODE"
-        }
+        windeployqt TicTacToeProjectfinal/TicTacToeProject/release/TicTacToeProject.exe
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
