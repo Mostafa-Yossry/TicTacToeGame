@@ -49,4 +49,6 @@ jobs:
 
     - name: Cleanup
       run: |
-        nmake clean  # Clean up build artifacts
+        del /Q /S release\*
+        del /Q /S debug\*
+
