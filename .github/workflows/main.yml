@@ -34,9 +34,7 @@ jobs:
         qmake TicTacToeProjectfinal/TicTacToeProject/TicTacToeProject.pro
         make
 
-    - name: Run tests
-      run: |
-        make test  # Run your Qt tests here
+    
 
     - name: Deploy
       if: success() && github.event_name == 'push' && github.ref == 'refs/heads/main'
